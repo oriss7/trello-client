@@ -1,0 +1,182 @@
+.HomePage{
+    .boards-buttons{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 90px;
+        .board-button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 100px;
+            border-radius: 10px;
+            color: white;
+            background-color: #0079bf;
+            box-shadow:
+            0 -0.5px 0.5px rgba(0, 0, 0, 0.1),   /* top */
+            0.5px 0 0.5px rgba(0, 0, 0, 0.1),   /* right */
+            -0.5px 0 0.5px rgba(0, 0, 0, 0.1),  /* left */
+            0 1px 1px rgba(0, 0, 0, 0.16);  /* bottom (stronger) */
+        }
+        .board-button:hover {
+            background-color: #006aa1;
+        }
+    }
+    .create-board{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 220px;
+        height: 100px;
+        border-radius: 10px;
+        color: #44546f;
+        background-color: #091e420f;
+        box-shadow:
+        0 -0.5px 0.5px rgba(0, 0, 0, 0.1),   /* top */
+        0.5px 0 0.5px rgba(0, 0, 0, 0.1),   /* right */
+        -0.5px 0 0.5px rgba(0, 0, 0, 0.1),  /* left */
+        0 1px 1px rgba(0, 0, 0, 0.16);  /* bottom (stronger) */
+    }
+    .create-board:hover {
+        color: #172b4d;
+        background-color: #e5e5e5;
+        box-shadow: none;
+    }
+    .create-board {
+        @media (max-width: 525px) {
+            font-size: 0; // hides the original text only on small screens
+            background-color: #8825ce;
+            border-radius: 15px;
+            width: 170px;
+            height: 50px;
+            margin-bottom: 0px;
+            position: fixed;  // changed to fixed
+            bottom: 75px;     // adjust this to be above your bottom navbar height
+            right: 20px;
+            box-shadow: 0 8px 10px rgba(0, 0, 0, 0.25),  /* bottom shadow */
+                        5px 0 5px rgba(0, 0, 0, 0.1);  /* right shadow */
+            &::before {
+                content: "+ Create board";
+                font-size: 16px; // make the +board visible
+                color: white;
+            }
+            &:hover{
+                background-color: rgba(136, 37, 206, 0.7); // 80% opacity, lighter visually
+                box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2),  /* bottom shadow */
+                            5px 0 5px rgba(0, 0, 0, 0.05);  /* right shadow */
+            }
+        }
+    }
+    .boards-buttons{
+        @media (max-width: 525px) {
+            flex-direction: column;
+            gap: 2px !important;
+        }
+    }
+    h3, h5{
+        color: #44546f;
+    }
+    h5{
+        margin-bottom: 3px;
+    }
+    p{
+        color: #172b4d;
+        margin-top: 5px;
+    }
+    span{
+        color: #c9372c;
+    }
+    .create-board-popup{
+        width: 190px;
+    }
+    input{
+        border: 1px solid #e34935;
+        &:focus {
+            border: 1px solid #0C66E4;
+            outline: none;
+        }
+    }
+}
+/* Default button style */
+// .board-button {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 220px;
+//   height: 100px;
+//   border-radius: 10px;
+//   color: white;
+//   background-color: #0079bf;
+//   position: relative;
+// }
+
+/* Only apply this styling at screen width <= 525px */
+@media (max-width: 625px) {
+//   .HomePage{
+    .boards-buttons{
+      gap: 10px !important;
+    }
+    .board-button{
+        width: 180px !important;
+        height: 70px !important;
+      }
+    .create-board{
+      margin-top: 20px !important;
+      width: 180px !important;
+      height: 70px !important;
+    }
+//   }
+}
+@media (max-width: 525px) {
+  .boards-buttons {
+    margin-top: 10px !important;
+    margin-left: 0 !important;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap !important;
+    gap: 10px;
+  }
+  .board-button-wrapper {
+    position: relative;
+    width: 100%; /* full clickable width */
+    height: 50px;
+    flex-shrink: 0; /* prevent collapsing */
+  }
+  .board-button-wrapper:hover {
+    background-color: lightgray;
+    .board-button {
+        background-color: #006aa1;
+    }
+  }
+  .board-button {
+    font-size: 0; /* hide text inside */
+    width: 100px !important;
+    height: 35px !important;
+    background-color: #0079bf;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 10px; /* match your current left spacing */
+    top: 50%; /* center vertically */
+    transform: translateY(-50%); /* adjust for own height */
+  }
+  .board-button::after {
+    content: attr(data-title);
+    font-size: 16px;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+    color: #333;
+    white-space: nowrap;
+  }
+}

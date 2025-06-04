@@ -1,0 +1,77 @@
+.updateAccount{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-left: 120px;
+    .updateInput{
+        display: flex;
+        flex-direction: column;
+    }
+    input{
+        margin-bottom: 0;
+    }
+    button{
+        margin-bottom: 4px;
+    }
+    h2{
+        margin: 0;
+    }
+    h1, h2{
+        color: #172b4d;
+    }
+    p{
+        margin-top: 0;
+    }
+    .delete-account{
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        .delete-account-question{
+            color: red;
+        }
+        .delete-account-confirm{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            .delete-account-button{
+                color: red;
+                width: 148px;
+            }
+        }
+        .delete-input-error{
+            color: red;
+            font-size: 0.8rem;
+        }
+    }
+}
+@media screen and (max-width: 525px){
+    .updateAccount{
+        margin: auto !important;
+    }
+}
+@media screen and (max-width: 330px){
+    .updateAccount{
+        gap: 0;
+        .delete-account{
+            width: 200px;
+            .delete-account-confirm{
+                .delete-account-button{
+                    width: 98px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 225px){
+    .updateAccount{
+        gap: 0;
+        .delete-account{
+            width: 100px;
+            .delete-account-confirm{
+                .delete-account-button{
+                    width: 43px;
+                }
+            }
+        }
+    }
+}

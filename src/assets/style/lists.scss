@@ -1,0 +1,120 @@
+.lists-wrapper{
+    width: 100%;
+    // height: 100%;
+    height: calc(100vh - 90px);
+    overflow-x: auto;
+    .lists{
+        display: flex;
+        align-items: flex-start; // prevents stretch or shrink
+        flex-wrap: nowrap; // 💡 Force horizontal scroll, prevent wrapping
+        width: max-content; /* important - allow width to grow with content */
+        input{
+            color: #172b4d;
+            border: 1px solid transparent; /* Keeps space for the border */
+            outline: none;
+            background-color: white;
+            border-radius: 7px;
+            margin-bottom: 10px;
+            &:focus {
+                border: 1px solid #0C66E4;
+            }
+        }
+        .add-confirm{
+            display: flex;
+            gap: 10px;
+            margin-left: 5px;
+            .confirm-button, .x-button{
+                padding: 6px 12px;
+                border-radius: 3px;
+                font-weight: 600;
+                height: 40px;
+            }
+            .x-button{
+                font-size: 30px;
+                font-weight: 500;
+                color: #172b4d;
+                background-color: transparent;
+                display: flex;
+                align-items: center;   /* Vertical center */
+                justify-content: center; /* Horizontal center */
+            }
+            .x-button:hover{
+                background-color: lightgray;
+            }
+        }
+        .list{
+            width: 290px;
+            margin-left: 20px;
+            margin-top: 20px;
+            padding: 8px;
+            border-radius: 12px;
+            background-color: #f1f2f4;
+            box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
+            .list-title{
+                color: #172b4d;
+                padding: 12px;
+                margin-top: 0px;
+                font-weight: 700;
+            }
+            input{
+                box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
+                outline: none;
+                width: 250px;
+                margin-left: -10px;
+                margin-top: -3px;
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+            .add-card-button{
+                font-weight: 500;
+                color: #44546f;
+                padding: 12px;
+            }
+            .add-card-button:hover {
+                color: #172b4d;
+                background-color: #C8C8C8;
+                border-radius: 12px;
+            }
+            .add-card-div{
+                padding: 12px;
+                .card-confirm{
+                    margin-left: -10px;
+                }
+            }
+        }
+        .add-list-button {
+            width: 290px;
+            margin-top: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            color: white;
+            background-color: #ffffff3d;
+            font-weight: 500;
+        }
+        .add-list-div{
+            width: 290px;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            padding: 8px;
+            border-radius: 12px;
+            background-color: #f1f2f4;
+            box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
+            input{
+                width: 242px;
+                margin-left: 5px;
+                margin-top: 5px;
+                font-weight: 580;
+            }
+        }
+        .add-list-button:hover {
+            background-color: rgba(255, 255, 255, 0.18);
+        }
+        .list, .add-list-button, .add-list-div {
+            flex: 0 0 auto; // <--- ✅ Prevent shrinking and keep width fixed
+        }
+    }
+}

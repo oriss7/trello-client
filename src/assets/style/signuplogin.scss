@@ -1,0 +1,38 @@
+.signupLogin{
+    gap: 15px;
+    margin: 30px auto;
+    border-radius: 3px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    .auth-title{
+        h1{
+            margin: 0;
+        }
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        svg{
+            width: 30px;
+            height: 30px;
+        }
+    }
+    h1, h4{
+        color: #172b4d;
+    }
+    p{
+        margin-top: 0;
+    }
+    a{
+        color: #0C66E4;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+@media (max-width: 430px) {
+    .signupLogin {
+        box-shadow: none;
+    }
+}
