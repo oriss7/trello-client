@@ -17,7 +17,7 @@ export async function query(boardId) {
     return response.lists
 }
 
-// export async function update(BoardId, data) {
-//     const response =  await httpService.put(`${ENDPOINT}/${BoardId}`, data)
-//     return response.updatedBoard
-// }
+export async function update(listId, data) {
+    const response =  await httpService.put(`${ENDPOINT}/${listId}`, data)
+    return response.updatedList
+}

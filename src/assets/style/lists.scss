@@ -54,9 +54,14 @@
                 color: #172b4d;
                 padding: 12px;
                 margin-top: 0px;
-                font-weight: 700;
+                font-weight: 600;
             }
-            input{
+            .update-list-input{
+                border-radius: 3px;
+                margin-top: 11px;
+                font-weight: 600;
+            }
+            .add-card-input{
                 box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
                 outline: none;
                 width: 250px;

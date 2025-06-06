@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from 'react'
-import { create, query } from '../services/list.service'
+import { create, query, update } from '../services/list.service'
 import { BoardContext } from './boardContext';
 export const ListContext = createContext({}) 
 
@@ -31,6 +31,7 @@ export function ListContextProvider({ children }) {
             isLoading: false
         });
     }
+
     // async function loadList(listId) {
     //     const list = await get(listId)
     //     return list
@@ -49,10 +50,19 @@ export function ListContextProvider({ children }) {
         setLists([...(Array.isArray(listState.lists) ? listState.lists : []), newList]);
         setIsLoading(false)
     }
-
+    async function onUpdateList(listId, data){
+        setIsLoading(true)
+        const updatedList = await update(listId, data)
+        const updatedLists = listState.lists.map(list =>
+            list._id === listId ? updatedList : list
+        )
+        setLists(updatedLists)
+        setIsLoading(false)
+    }
+   
     return (
         <ListContext.Provider value={{ listState, setListState, setIsLoading, setLists, resetListState,
-                                        loadLists, onCreateList }}>
+                                        loadLists, onCreateList, onUpdateList }}>
                                 {children}
         </ListContext.Provider>
     )

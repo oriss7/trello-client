@@ -5,6 +5,7 @@ import { BoardContext } from '../context/boardContext';
 import { ListContext } from '../context/listContext';
 import { CardContext } from '../context/cardContext';
 import List from '../components/List';
+import TitleInputHandler from '../components/TitleInputHandler';
 
 export default function BoardPage() {
     const { boardId } = useParams();
@@ -51,36 +52,6 @@ export default function BoardPage() {
         inputRef.current.style.width = `${textWidth + paddingLeft + paddingRight + 2}px`;
     }, [titleInput, updateBoardTitle])
 
-    useEffect(() => {
-        if (updateBoardTitle && inputRef.current) {
-            inputRef.current.select();
-        }
-    }, [updateBoardTitle])
-
-    useEffect(() => {
-        if (!updateBoardTitle) return;
-        async function handleInteraction(event) {
-            const isOutsideClick = event.type === 'mousedown' &&
-                inputRef.current && !inputRef.current.contains(event.target);
-
-            const isEnterKeyInsideInput =
-                event.type === 'keydown' && event.key === 'Enter' &&
-                inputRef.current && inputRef.current.contains(event.target);
-
-            if (isOutsideClick || isEnterKeyInsideInput) {
-                await handleUpdate();
-                setUpdateBoardTitle(false);
-            }
-        }
-        document.addEventListener('mousedown', handleInteraction);
-        document.addEventListener('keydown', handleInteraction);
-
-        return () => {
-            document.removeEventListener('mousedown', handleInteraction);
-            document.removeEventListener('keydown', handleInteraction);
-        };
-    }, [updateBoardTitle]);
-
     async function handleUpdate() {
         const newTitle = inputRef.current?.value?.trim().replace(/\s+/g, ' ')
         if (!newTitle) return
@@ -104,8 +75,12 @@ export default function BoardPage() {
                             {boardState.selectedBoard.title}
                         </div>
                     ) : (
+                        <>
                         <input ref={inputRef} value={titleInput} className="title-input" maxLength="30"
-                        onChange={(e) => setTitleInput(e.target.value)}autoFocus/>
+                            onChange={(e) => setTitleInput(e.target.value)}autoFocus/>
+                        <TitleInputHandler inputRef={inputRef}
+                            onDone={async () => { await handleUpdate(); setUpdateBoardTitle(false);}}/>
+                        </>
                     )}
                 </div>
                 <List />
