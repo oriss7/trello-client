@@ -50,6 +50,7 @@ export function ListContextProvider({ children }) {
         setLists([...(Array.isArray(listState.lists) ? listState.lists : []), newList]);
         setIsLoading(false)
     }
+    
     async function onUpdateList(listId, data){
         setIsLoading(true)
         const updatedList = await update(listId, data)
@@ -59,10 +60,25 @@ export function ListContextProvider({ children }) {
         setLists(updatedLists)
         setIsLoading(false)
     }
-   
+
+    async function onMoveList(reorderedLists) {
+        setIsLoading(true)
+        setLists(
+            reorderedLists
+                .map(l => ({ ...l }))
+                .sort((a, b) => a.position - b.position)
+        )
+        await Promise.all(
+            reorderedLists.map(list =>
+                update(list._id, { position: list.position })
+            )
+        )
+        setIsLoading(false);
+    }
+
     return (
         <ListContext.Provider value={{ listState, setListState, setIsLoading, setLists, resetListState,
-                                        loadLists, onCreateList, onUpdateList }}>
+                                        loadLists, onCreateList, onUpdateList, onMoveList }}>
                                 {children}
         </ListContext.Provider>
     )

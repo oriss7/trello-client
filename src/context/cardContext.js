@@ -60,9 +60,58 @@ export function CardContextProvider({ children }) {
         setIsLoading(false)
     }
     
+    async function onMoveCard({ cardId, fromListId, toListId, newIndex }) {
+        setIsLoading(true);
+
+        const fromCards = [...(cardState.cardsByList[fromListId] || [])];
+        const toCards = fromListId === toListId ? fromCards : [...(cardState.cardsByList[toListId] || [])];
+
+        const movingCardIndex = fromCards.findIndex(card => card._id === cardId);
+        if (movingCardIndex === -1) {
+            console.error('Card not found in source list');
+            setIsLoading(false);
+            return;
+        }
+
+        const [movingCard] = fromCards.splice(movingCardIndex, 1);
+        
+        movingCard.list = toListId;
+
+        toCards.splice(newIndex, 0, movingCard);
+
+        const updatedFromCards = fromListId === toListId ? [] : fromCards.map((card, index) => ({
+            ...card,
+            position: index,
+        }));
+
+        const updatedToCards = toCards.map((card, index) => ({
+            ...card,
+            position: index,
+        }));
+
+        if (fromListId !== toListId) {
+            setCards(fromListId, updatedFromCards);
+        }
+        setCards(toListId, updatedToCards);
+
+        const updates = []
+
+        if (fromListId !== toListId) {
+            updates.push(...updatedFromCards.map(card =>
+                update(card._id, { list: card.list, position: card.position })
+            ));
+        }
+        updates.push(...updatedToCards.map(card =>
+            update(card._id, { list: card.list, position: card.position })
+        ));
+
+        await Promise.all(updates);
+        setIsLoading(false);
+    }
+
     return (
         <CardContext.Provider value={{ cardState, setCardState, setIsLoading, setCards, resetCardState,
-                                        loadCards, onCreateCard, onUpdateCard }}>
+                                        loadCards, onCreateCard, onUpdateCard, onMoveCard }}>
                                 {children}
         </CardContext.Provider>
     )

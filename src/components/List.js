@@ -1,14 +1,16 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import Card from './Card';
 import { ListContext } from '../context/listContext';
+import { CardContext } from '../context/cardContext';
 import { BoardContext } from '../context/boardContext';
 import TitleInputHandler from './TitleInputHandler';
 import DivOutsideEnter from './DivOutsideEnter';
-
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 // if lists > 0 : <div>+ Add another list</div>
 
 export default function List() {
-    const { listState, onCreateList, onUpdateList, loadLists } = useContext(ListContext);
+    const { listState, onCreateList, onUpdateList, loadLists, onMoveList} = useContext(ListContext);
+    const { cardState, onMoveCard } = useContext(CardContext);
     const { boardState } = useContext(BoardContext);
     const [isAddList, setIsAddList] = useState(false);
     const [listToAdd, setListToAdd] = useState('');
@@ -36,7 +38,7 @@ export default function List() {
         setListToAdd('')
         setIsAddList(false)
     }
-
+    
     async function handleUpdate(listId) {
         const newTitle = inputRef.current?.value?.trim().replace(/\s+/g, ' ');
         if (!newTitle) return;
@@ -53,12 +55,11 @@ export default function List() {
             await onUpdateList(listId, valuesToUpdate);
         }
     }
-    
+
     const onDone = (type) => {
         if (type === 'enter') {
             const input = addListRef.current?.querySelector('input');
             const cleaned = input?.value?.replace(/\s+/g, ' ').trim();
-
             if (cleaned) {
                 handleAddList();
             } else {
@@ -68,13 +69,63 @@ export default function List() {
             setIsAddList(false);
         }
     };
+    
+    const handleOnDragEnd = async (result) => {
+        const { destination, source, draggableId, type } = result;
+        if (!destination) return;
 
+        if (type === 'list') {
+            if (destination.index === source.index) return;
 
+            const updatedLists = [...listState.lists]
+                .filter(list => list && list._id)
+                .sort((a, b) => a.position - b.position);
+
+            const [movedList] = updatedLists.splice(source.index, 1);
+            updatedLists.splice(destination.index, 0, movedList);
+
+            const reordered = updatedLists.map((list, index) => ({
+                ...list,
+                position: index
+            }));
+            
+            await onMoveList(reordered);
+        }
+        if (type === 'card') {
+            const sourceListId = source.droppableId;
+            const destListId = destination.droppableId;
+
+            if (sourceListId === destListId && source.index === destination.index) return;
+
+            const sourceCards = [...(cardState.cardsByList[sourceListId] || [])];
+            const [movedCard] = sourceCards.splice(source.index, 1);
+
+            const destCards = [...(cardState.cardsByList[destListId] || [])];
+            destCards.splice(destination.index, 0, movedCard);
+
+            await onMoveCard({
+                cardId: draggableId,
+                fromListId: sourceListId,
+                toListId: destListId,
+                newIndex: destination.index,
+            });
+        }
+    };
+    
     return (
         <div className="lists-wrapper">
-        <div className='lists'>
-            {listState.lists?.map(list => (
-                <div className='list' key={list._id}>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="all-lists" direction="horizontal" type="list">
+        {(provided) => (
+        <div className='lists' ref={provided.innerRef} {...provided.droppableProps}>
+            
+            {listState.lists?.filter(list => list && list._id).sort((a, b) => a.position - b.position)
+                                .map((list, index) => (
+                <Draggable draggableId={list._id} index={index} key={list._id}>
+                {(provided) => (
+                
+                <div className="list" ref={provided.innerRef}
+                        {...provided.draggableProps} {...provided.dragHandleProps}>
                     {updatingListId === list._id ? (
                         <>
                         <input ref={inputRef} value={titleInput} className='update-list-input' maxLength={30}
@@ -91,7 +142,10 @@ export default function List() {
                     )}
                     <Card listId={list._id} />
                 </div>
+                )}
+                </Draggable>
             ))}
+            {provided.placeholder}
             { !isAddList ? (
                 <div onClick={() => setIsAddList(true)} className='add-list-button pointer'>
                     + Add a list
@@ -110,6 +164,9 @@ export default function List() {
                 </>
             )}
         </div>
+        )}
+        </Droppable>
+        </DragDropContext>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { CardContext } from '../context/cardContext';
 import DivOutsideEnter from './DivOutsideEnter';
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function Card({listId}) {
     const { cardState, loadCards, onCreateCard, onUpdateCard } = useContext(CardContext);
@@ -43,17 +44,26 @@ export default function Card({listId}) {
     }
     
     return (
-        <div className='cards'>
+        <Droppable droppableId={listId} type="card">
+            {(provided) => (
+        
+        <div className='cards' ref={provided.innerRef} {...provided.droppableProps}>
             <div className='cards-wrapper'>
-            {cards.map(card => (
-                <div key={card._id} className='card pointer'>
+            {[...cards].sort((a, b) => a.position - b.position).map((card, index) => (
+                <Draggable key={card._id} draggableId={card._id} index={index}>
+                {(provided) => (
+                <div className='card pointer' ref={provided.innerRef}
+                {...provided.draggableProps} {...provided.dragHandleProps}>
                     <div className='card-content'>
                         <input type="checkbox" checked={card.complete} className='pointer'
                         onChange={() => handleToggleComplete(card._id, card.complete)}/>
                         <p className={`card-title ${card.complete ? 'completed' : ''}`}>{card.title}</p>
                     </div>
                 </div>
+                )}
+                </Draggable>
             ))}
+            {provided.placeholder}
             </div>
             { !isAddCard ? (
                 <div onClick={() => setIsAddCard(true)} className='add-card-button pointer'>
@@ -72,5 +82,7 @@ export default function Card({listId}) {
                 </div>
             )}
         </div>
+        )}
+        </Droppable>
     );
 }
