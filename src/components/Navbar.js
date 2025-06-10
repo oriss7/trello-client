@@ -28,15 +28,15 @@ export default function Navbar() {
   return (
     <>
       <div className={`navbar-item pointer ${isHome ? 'active' : ''}`} onClick={navigateToHome}>
-        <BoardsIcon className="btn-img"/>
+        <BoardsIcon/>
         <span>Boards</span>
       </div>
       <div className={`navbar-item pointer ${isEdit ? 'active' : ''}`} onClick={navigateToEdit}> 
-        <UpdateIcon className="btn-img"/>
+        <UpdateIcon/>
         <span>Edit Profile</span>
       </div>
       <div className="navbar-item pointer" onClick={onLogout}>
-        <LogoutIcon className="btn-img"/>
+        <LogoutIcon/>
         <span>Logout</span>
       </div>
     </>

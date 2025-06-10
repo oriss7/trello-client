@@ -1,5 +1,4 @@
 import { createContext, useState, useContext } from 'react'
-// import { query, create, remove, get, update } from '../services/transaction.service'
 import { get, query, create, update } from '../services/board.service'
 import { AuthContext } from './authContext';
 import { useNavigate } from 'react-router-dom';
@@ -67,9 +66,10 @@ export function BoardContextProvider({ children }) {
         }
         setIsLoading(false)
     }
-    async function onUpdateBoard(boardId, data) {
+    
+    async function onUpdateBoard(data) {
         setIsLoading(true)
-        const updatedBoard = await update(boardId, data)
+        const updatedBoard = await update(boardState.selectedBoard._id, data)
         setSelectedBoard(updatedBoard)
         setIsLoading(false)
     }

@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react'
-import { login, signup, logout, get, update, remove } from '../services/auth.service'
+import { login, signup, logout, getLoggedInAccount, get, query, update, remove } from '../services/auth.service'
 import { useNavigate} from 'react-router-dom';
 
 export const AuthContext = createContext({}) 
@@ -30,18 +30,40 @@ export function AuthContextProvider({ children }) {
   async function loadLoggedInAccount() {
     setIsLoading(true)
     try {
-      const response = await get()
+      const response = await getLoggedInAccount()
       const { account } = response
       if(account) {
         setLoggedInAccount(account)
       }
       return account || null
     } catch (error) {
-      console.error('Error loading account:', error)
-      setLoggedInAccount(null)
-      return null
+        console.error('Error loading account:', error)
+        setLoggedInAccount(null)
+        return null
     } finally {
-      setIsLoading(false)
+        setIsLoading(false)
+    }
+  }
+
+  async function loadAccount(accountId) {
+    try {
+      const response = await get(accountId)
+      const { account } = response
+      return account || null
+    } catch (error) {
+        console.error('Error loading account:', error)
+        return null
+    }
+  }
+
+  async function loadAccounts() {
+    try {
+      const response = await query()
+      const { accounts } = response
+      return accounts || null
+    } catch (error) {
+        console.error('Error loading accounts:', error)
+        return null
     }
   }
 
@@ -102,8 +124,9 @@ export function AuthContextProvider({ children }) {
 	}
 
   return (
-    <AuthContext.Provider value={{ authState, setAuthState, setLoggedInAccount, setIsLoading, loadLoggedInAccount,
-                                    onLogin, onSignup, onLogout, onUpdateAccount, onDeleteAccount}}>
+    <AuthContext.Provider value={{ authState, setAuthState, setLoggedInAccount, setIsLoading,
+                                    loadLoggedInAccount, loadAccount, loadAccounts, onLogin,
+                                    onSignup, onLogout, onUpdateAccount, onDeleteAccount}}>
       {children}
     </AuthContext.Provider>
   )

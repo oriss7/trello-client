@@ -1,11 +1,16 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 import { BoardContext } from '../context/boardContext';
 import { ListContext } from '../context/listContext';
 import { CardContext } from '../context/cardContext';
 import List from '../components/List';
+import Search from '../components/Search';
 import TitleInputHandler from '../components/TitleInputHandler';
+import { ReactComponent as AddMemberIcon } from '../assets/images/addMember.svg';
+import { ReactComponent as BoardsIcon } from '../assets/images/boards.svg';
+
 
 export default function BoardPage() {
     const { boardId } = useParams();
@@ -16,6 +21,8 @@ export default function BoardPage() {
     const [updateBoardTitle, setUpdateBoardTitle] = useState(false);
     const [titleInput, setTitleInput] = useState('');
     const inputRef = useRef(null);
+
+    const [isAddMember, setIsAddMember] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -52,6 +59,8 @@ export default function BoardPage() {
         inputRef.current.style.width = `${textWidth + paddingLeft + paddingRight + 2}px`;
     }, [titleInput, updateBoardTitle])
 
+    const navigate = useNavigate()
+
     async function handleUpdate() {
         const newTitle = inputRef.current?.value?.trim().replace(/\s+/g, ' ')
         if (!newTitle) return
@@ -60,7 +69,7 @@ export default function BoardPage() {
           valuesToUpdate.title = newTitle;
         }
         if (Object.keys(valuesToUpdate).length !== 0) {
-          await onUpdateBoard(boardState.selectedBoard._id, valuesToUpdate)
+          await onUpdateBoard(valuesToUpdate)
         }
     }
 
@@ -69,6 +78,9 @@ export default function BoardPage() {
             {boardState.selectedBoard &&
             <>
                 <div className='board-navbar'>
+                    <div className='navigate-board-page pointer' onClick={() => navigate('/')}>
+                        <BoardsIcon/>
+                    </div>
                     {!updateBoardTitle ? (
                         <div className='board-title pointer' onClick={() => {
                             setTitleInput(boardState.selectedBoard.title);setUpdateBoardTitle(true);}}>
@@ -82,6 +94,13 @@ export default function BoardPage() {
                             onDone={async () => { await handleUpdate(); setUpdateBoardTitle(false);}}/>
                         </>
                     )}
+                    {isAddMember && (
+                        <Search setIsAddMember={setIsAddMember} />
+                    )}                        
+                    <div className="add-members pointer" onClick={() => setIsAddMember(true)}>
+                        <AddMemberIcon/>
+                        <span>Share</span>
+                    </div>
                 </div>
                 <List />
             </>

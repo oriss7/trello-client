@@ -15,8 +15,17 @@ export async function logout() {
     return await httpService.post(`${AUTH_ENDPOINT}/logout`)
 }
 
-export async function get() {
+export async function getLoggedInAccount() {
     return await httpService.get(`${ACCOUNT_ENDPOINT}`)
+}
+
+export async function get(accountId) {
+    return await httpService.get(`${ACCOUNT_ENDPOINT}/${accountId}`)
+}
+
+export async function query() {
+    const res = await httpService.get(`${ACCOUNT_ENDPOINT}/query`)
+    return res
 }
 
 export async function update(accountId, data) {

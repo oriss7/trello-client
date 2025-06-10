@@ -48,16 +48,17 @@ export default function HomePage() {
       </div>
       <div className="create-board pointer" onClick={() => setIsPopupOpen(true)}>Create new board</div>
     {isPopupOpen && (
-      <Popup handleClose={() => setIsPopupOpen(false)}>
-        <h3>Create board</h3>
-        <div>
-          <h5>Board title <span>*</span></h5>
-          <input type="text" value={boardTitle} maxLength={40}
-                onChange={(e) => setBoardTitle(e.target.value)}/>
-          <p>👋Board title is required</p>
-        </div>
-        <button onClick={handleCreateBoard} className="create-board-popup pointer" disabled={!boardTitle.trim()}>Create</button>
-      </Popup>
+        <Popup handleClose={() => setIsPopupOpen(false)} className = 'create-board-popup'>
+            <h3>Create board</h3>
+            <div>
+              <h5>Board title <span>*</span></h5>
+              <input type="text" value={boardTitle} maxLength={40}
+                    onChange={(e) => setBoardTitle(e.target.value)}/>
+              <p>👋Board title is required</p>
+            </div>
+            <button onClick={handleCreateBoard} className="create-board-popup pointer"
+                    disabled={!boardTitle.trim()}>Create</button>
+        </Popup>
     )}
     </div>
     </div>

@@ -9,6 +9,21 @@
         background-color: hsla(202, 100%, 30%, 0.9);
         margin-top: 0;
         padding: 20px 20px;
+        display: flex;
+        align-items: center;
+        .navigate-board-page{
+            svg{
+                color: white;
+                width: 35px;
+                height: 35px;
+                margin-right: 10px;
+                padding: 3px 3px;
+                border-radius: 4px;
+                &:hover{
+                    background-color: hsla(202, 60%, 49%, 0.9);
+                }
+            }
+        }
         .board-title{
             color: white;
             background-color: transparent;
@@ -23,7 +38,8 @@
                 background-color: hsla(202, 60%, 49%, 0.9);
             }
         }
-        input{
+        // input{
+        .title-input{
             box-sizing: border-box;
             background-color: white;
             border: 1px solid transparent;
@@ -37,7 +53,6 @@
                 box-shadow: 0 0 0 1px black;
                 border-radius: 2px;
             }
-
         }
         .title-input {
             box-sizing: border-box;
@@ -57,6 +72,116 @@
             font-size: 18px;
             font-weight: 600;
             padding: 7px 15px;
+        }
+        .add-members{
+            background-color: #DCDFE4;
+            color: #172B4D;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            position: absolute;
+            right: 60px;
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+            &:hover{
+                background-color: #FFF5EE;
+            }
+            @media (max-width: 900px) {
+                right: 20px;
+            }
+        }
+        .add-member-popup{
+            width: 600px;
+            position: fixed;
+            top: 10%;
+            display: flex;
+            align-items: start;
+            .share-board-title{
+                color: #172B4D;
+                font-size: 20px;
+                margin-top: 0px;
+            }
+            .add-member-search{
+                input{
+                    width: 350px;
+                    margin-right: 20px;
+                }
+            }
+            .not-owner{
+                margin: 0;
+                color: red;
+            }
+            .searchResults{
+                max-height: 150px;
+                width: 350px;
+                overflow-y: auto;
+                margin-top: 5px;
+                p{
+                    color: #172B4D;
+                    font-size: 16px;
+                    padding: 10px 10px;
+                    margin: 0px;
+                }
+                p:hover{
+                    background-color: #e5e5e5;
+                }
+                p.selected {
+                    background-color: #0C66E4;
+                    color: white;
+                }
+            }
+            .board-members-title{
+                color: #0C66E4;
+                font-weight: 600;
+                border-bottom: solid 2px #0C66E4;
+                width: 432px;
+                margin-bottom: 0px;
+            }
+            .board-member{
+                color: #44546f;
+                margin-bottom: 0px;
+                .remove-member{
+                    color: red;
+                    &:hover {
+                        border-bottom: solid 1px red;
+                    }
+                }
+            }
+            @media (max-width: 700px) {
+                width: 500px;
+            }
+            @media (max-width: 525px) {
+                width: 100vw;
+                top: 0%;
+                .add-member-search{
+                    input{
+                        width: 250px;
+                        margin-right: 20px;
+                    }
+                }
+                .searchResults{
+                    width: 250px;
+                }
+                .board-members-title{
+                    width: 331px;
+                }
+            }
+            @media (max-width: 300px) {
+                .add-member-search{
+                    input{
+                        width: 200px;
+                    }
+                }
+                .searchResults{
+                    width: 200px;
+                }
+            }
         }
     }
 }
