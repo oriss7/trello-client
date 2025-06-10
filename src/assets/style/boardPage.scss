@@ -136,6 +136,11 @@
                     color: white;
                 }
             }
+            .board-members{
+                max-height: 150px;
+                width: 432px;
+                overflow-y: auto;
+            }
             .board-members-title{
                 color: #0C66E4;
                 font-weight: 600;
@@ -168,8 +173,18 @@
                 .searchResults{
                     width: 250px;
                 }
-                .board-members-title{
+                .board-members-title, .board-members{
                     width: 331px;
+                }
+            }
+            @media (max-width: 365px) {
+                .add-member-search{
+                    input{
+                        margin-bottom: 5px;
+                    }
+                }
+                .board-members-title, .board-members{
+                    width: 250px;
                 }
             }
             @media (max-width: 300px) {
@@ -178,7 +193,7 @@
                         width: 200px;
                     }
                 }
-                .searchResults{
+                .searchResults, .board-members, .board-members-title{
                     width: 200px;
                 }
             }

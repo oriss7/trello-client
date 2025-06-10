@@ -10,19 +10,22 @@ export default function Search({setIsAddMember}) {
   	const [searchResults, setSearchResults] = useState([])
   	const [accounts, setAccounts] = useState([])
   	const [members, setMembers] = useState([])
-
     const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [isSharing, setIsSharing] = useState(false);
+    const [removingMemberId, setRemovingMemberId] = useState(null);
     
     useEffect(() => {
         (async () => {
-            const fetchedAccounts = await loadAccounts();
-            setAccounts(fetchedAccounts || []);
-
+            const fetchedAccounts = await loadAccounts()            
             const memberIds = boardState.selectedBoard.members || [];
             const fetchedMembers = await Promise.all(
-            memberIds.map((id) => loadAccount(id)));
-            // 3. Filter out any failed/null results and update state
-            setMembers(fetchedMembers.filter(Boolean));
+                memberIds.map((id) => loadAccount(id)))            
+            const validMembers = fetchedMembers.filter(Boolean);
+            setMembers(validMembers)
+            const filteredAccounts = (fetchedAccounts || []).filter(
+                (account) => !validMembers.some(member => member._id === account._id)
+            );
+            setAccounts(filteredAccounts)
         })();
     }, []);
 
@@ -33,8 +36,7 @@ export default function Search({setIsAddMember}) {
             const uniqueResults = accounts.filter(account =>
                 (account.email.toLowerCase().includes(value.toLowerCase()) || 
                 account.name.toLowerCase().includes(value.toLowerCase())) &&
-                !boardState.selectedBoard.members.includes(account._id));
-            
+                !boardState.selectedBoard.members.includes(account._id))            
             setSearchResults(uniqueResults)
             if (selectedAccountId && !uniqueResults.some(account => account._id === selectedAccountId)) {
                 setSelectedAccountId(null)
@@ -46,20 +48,31 @@ export default function Search({setIsAddMember}) {
 	}
 
     async function handleShare() {
-        if (selectedAccountId) {
-            const data = {
-                newMember: selectedAccountId
-            };
-            await onUpdateBoard(data);
+        if (!selectedAccountId || isSharing) return; // prevent duplicates
+        setIsSharing(true)
+        const data = { newMember: selectedAccountId }
+        await onUpdateBoard(data)
+        const selectedAccount = accounts.find(account => account._id === selectedAccountId);
+        if (selectedAccount) {
+            setMembers(prev => [...prev, selectedAccount]);
+            setAccounts(prev => prev.filter(account => account._id !== selectedAccountId));
+            setSelectedAccountId(null);
+            setSearchTerm('')
         }
+        setIsSharing(false)
     };
 
     async function handleRemoveMember(memberId) {
-        const data = {
-            removeMember: memberId
-        };
-        await onUpdateBoard(data);
-        setMembers(prev => prev.filter(member => member._id !== memberId));
+        if (removingMemberId === memberId) return; // Prevent duplicate calls
+        setRemovingMemberId(memberId)
+        const data = { removeMember: memberId }
+        await onUpdateBoard(data)
+        const removedMember = members.find(member => member._id === memberId);
+        if (removedMember) {
+            setMembers(prev => prev.filter(member => member._id !== memberId));
+            setAccounts(prev => [...prev, removedMember]);
+        }
+        setRemovingMemberId(null)
     }
 
 	return(
@@ -70,7 +83,7 @@ export default function Search({setIsAddMember}) {
                         value={searchTerm} onChange={handleSearch}
                         disabled={authState.loggedInAccount._id !== boardState.selectedBoard.owner}/>
                 <button className="pointer" onClick={() => { handleShare(); }}
-                    disabled={authState.loggedInAccount._id !== boardState.selectedBoard.owner}>
+                    disabled={authState.loggedInAccount._id !== boardState.selectedBoard.owner || isSharing}>
                         Share</button>
             </div>
             {authState.loggedInAccount._id !== boardState.selectedBoard.owner && (
@@ -81,30 +94,34 @@ export default function Search({setIsAddMember}) {
                     {searchResults.slice(0,20).map(account => (
                         <div key={account._id}>                            
                             <p className={`pointer ${selectedAccountId === account._id ? 'selected' : ''}`}
-                                onClick={() => { setSelectedAccountId(account._id)}}>
+                                onClick={() => {if (selectedAccountId === account._id)
+                                {setSelectedAccountId(null);}
+                                else {setSelectedAccountId(account._id);}}}>
                                 {account.name} - {account.email}</p>
                         </div>
                     ))}
                 </div>
             )}
             <p className='board-members-title'>Board members</p>
-            
-            {members.map((member) => (
-                <p key={member._id} className='board-member'>
-                    {member.name}
-                    {member._id === boardState.selectedBoard.owner ? (
-                        ' • Workspace admin'
-                    ) : authState.loggedInAccount._id === boardState.selectedBoard.owner ? (
-                        <>
-                        <span>{' • '}</span>
-                        <span className="remove-member pointer"
-                            onClick={() => handleRemoveMember(member._id)}>
-                            {'Remove member'}
-                        </span>
-                        </>
-                    ) : null }
-                </p>
-            ))}
+            <div className='board-members'>
+                {members.map((member) => (
+                    <p key={member._id} className='board-member'>
+                        {member.name}
+                        {member._id === boardState.selectedBoard.owner ? (
+                            ' • Workspace admin'
+                        ) : authState.loggedInAccount._id === boardState.selectedBoard.owner ? (
+                            <>
+                            <span>{' • '}</span>
+                            <span className="remove-member pointer"
+                                onClick={() => {if (removingMemberId !== member._id)
+                                {handleRemoveMember(member._id);}}}>
+                                {'Remove member'}
+                            </span>
+                            </>
+                        ) : null }
+                    </p>
+                ))}
+            </div>
         </Popup>
 	)
 }
