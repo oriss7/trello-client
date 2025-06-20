@@ -1,10 +1,10 @@
 .BoardPage{
     background-color: #0079bf;
-    height: 100vh;      // full viewport height
-    width: 100vw;       // full viewport width
+    height: 100vh;
+    width: 100vw;
     margin: 0;
     padding: 0;
-    overflow: auto;     // allow scrolling if needed
+    overflow: auto;
     .board-navbar {
         background-color: hsla(202, 100%, 30%, 0.9);
         margin-top: 0;
@@ -84,7 +84,7 @@
             padding: 8px 12px;
             border-radius: 3px;
             position: absolute;
-            right: 60px;
+            right: 50px;
             svg {
                 width: 20px;
                 height: 20px;
@@ -92,8 +92,22 @@
             &:hover{
                 background-color: #FFF5EE;
             }
-            @media (max-width: 900px) {
-                right: 20px;
+        }
+        .dots-horizontal{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 10px;
+            svg {
+                color: white;
+                width: 35px;
+                height: 35px;
+                padding: 9px 9px;
+                border-radius: 4px;
+                &:hover{
+                    background-color: hsla(202, 60%, 49%, 0.9);
+                }
             }
         }
         .add-member-popup{
@@ -115,7 +129,7 @@
             }
             .not-owner{
                 margin: 0;
-                color: red;
+                color: #C9372C;
             }
             .searchResults{
                 max-height: 150px;
@@ -152,9 +166,9 @@
                 color: #44546f;
                 margin-bottom: 0px;
                 .remove-member{
-                    color: red;
+                    color:  #C9372C;
                     &:hover {
-                        border-bottom: solid 1px red;
+                        border-bottom: solid 1px #C9372C;
                     }
                 }
             }
@@ -198,6 +212,61 @@
                 }
             }
         }
+        .board-menu-popup{
+            width: 400px;
+            // position: fixed;
+            bottom: 25%;
+            p{
+                color: #44546f;
+                font-weight: 600;
+            }
+            .open-delete-board{
+                color: #172B4D;
+                width: 280px;
+                padding: 10px 15px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                svg{
+                    width: 25px;
+                    height: 25px;
+                }
+                &:hover {
+                    background-color: #e0e0e0;
+                }
+            }
+            .board-menu-title{
+                width: 280px;
+                display: flex;
+                justify-content: center;
+                border-bottom: 1px solid #626f86;
+                padding-bottom: 30px;
+            }
+            .delete-board-wrapper {
+                width: 280px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start; // Align content to the left
+                .delete-board-button{
+                    background-color: #C9372C;
+                    width: 280px;
+                    &:hover {
+                        background-color: #a82c23;
+                    }
+                    &:disabled {
+                        background-color: #e5e5e5;
+                    }
+                }
+                .not-owner-menu{
+                    margin: 0;
+                    color: #C9372C;
+                }
+            }
+            @media (max-width: 525px) {
+                width: 100vw;
+                bottom: 0%;
+            }
+        }
     }
 }
-// #005180

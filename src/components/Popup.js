@@ -1,18 +1,20 @@
 import { useEffect, useRef } from 'react';
 
-export default function Popup({ children, handleClose, className = '' }) {
+export default function Popup({ children, handleClose, className = '', disablePopupEffect = false }) {
   const popupRef = useRef();
 
-  // const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
+      if (window.innerWidth < 525) return;
       if (popupRef.current && !popupRef.current.contains(e.target)) {
         handleClose();
-        window.history.back()
-        if (!isMobile) {
+        if (!disablePopupEffect) {
           window.history.back()
+          if (!isMobile) {
+            window.history.back()
+          }
         }
       }
     };
@@ -24,28 +26,29 @@ export default function Popup({ children, handleClose, className = '' }) {
         window.history.back()
       }
     };
-
-    window.history.pushState({ popup: true }, '');
-
+    
+    if (!disablePopupEffect) {
+      window.history.pushState({ popup: true }, '');
+      window.addEventListener('popstate', handleBackButton);
+    }
     document.addEventListener('mousedown', handleClickOutside);
-    window.addEventListener('popstate', handleBackButton);
-
     document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('popstate', handleBackButton);
+      if (!disablePopupEffect) {
+        window.removeEventListener('popstate', handleBackButton);
+      }
       document.body.style.overflow = '';
     };
   }, []);
-  // }, [handleClose, isMobile]);
 
   return (
     <div className="popup-overlay">
       <div className={`popup ${className}`} ref={popupRef}>
         <button className="close-button pointer"
-          onClick={() => { window.history.back();
-          if (!isMobile) { window.history.back();}handleClose();}}>
+          onClick={() => { if (!disablePopupEffect) { window.history.back();
+          if (!isMobile) window.history.back() } handleClose();}}>
           &times;</button>
         {children}
       </div>

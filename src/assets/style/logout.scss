@@ -1,0 +1,21 @@
+.logout-popup{
+    width: 400px !important;
+    h2, p{
+        color: #172B4D;
+    }
+    p{
+        font-weight: 600;
+    }
+    .confirm-logout{
+        color: #C9372C;
+    }
+    .logoutMiddleBorder{
+        margin-top: 35px;
+        margin-bottom: 35px;
+        width: 200px;
+        border-bottom: 1.8px solid #172B4D;
+    }
+    @media (max-width: 525px) {
+        width: 100vw !important;
+    }
+}

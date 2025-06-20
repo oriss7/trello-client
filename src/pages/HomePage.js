@@ -12,6 +12,12 @@ export default function HomePage() {
   const [boardTitle, setBoardTitle] = useState('')
 
   useEffect(() => {
+    if (window.location.pathname !== '/') {
+      setIsPopupOpen(false);
+    }
+  }, [window.location.pathname]);
+
+  useEffect(() => {
     (async () => {
       if (authState.loggedInAccount) {
         await loadBoards()
@@ -28,7 +34,6 @@ export default function HomePage() {
   async function handleCreateBoard() {
     await onCreateBoard(boardTitle)
     setBoardTitle('')
-    setIsPopupOpen(false)
   }
 
   const { boards } = boardState;

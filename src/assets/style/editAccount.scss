@@ -27,19 +27,19 @@
         flex-direction: column;
         width: 300px;
         .delete-account-question{
-            color: red;
+            color: #C9372C;
         }
         .delete-account-confirm{
             display: flex;
             flex-wrap: wrap;
             gap: 3px;
             .delete-account-button{
-                color: red;
+                color: #C9372C;
                 width: 148px;
             }
         }
         .delete-input-error{
-            color: red;
+            color: #C9372C;
             font-size: 0.8rem;
         }
     }

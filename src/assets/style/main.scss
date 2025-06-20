@@ -27,9 +27,9 @@
   margin-right: 30px;
   margin-top: 90px;
   margin-left: 100px;
-  button{
-    width: 148px;
-  }
+  // button{
+  //   width: 1148px;
+  // }
 }
 button, input{
   padding: 10px;
@@ -85,6 +85,10 @@ input{
   border-radius: 10px;
   gap: 10px;
   color: #172b4d;
+  // transition: background-color 2s ease-in 2s, color 2s ease-in 2s;
+  @media (max-width: 525px) {
+    z-index: 2000;
+  }
   svg {
     width: 20px;
     height: 20px;
@@ -108,11 +112,11 @@ input{
     height: 18px;
   }
   .inputError{
-    color: red;
+    color: #C9372C;
     font-size: 0.8rem;
   }
 }
 .errorMessage{
-  color: red;
+  color: #C9372C;
   margin: 0;
 }

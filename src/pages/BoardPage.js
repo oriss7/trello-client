@@ -7,10 +7,11 @@ import { ListContext } from '../context/listContext';
 import { CardContext } from '../context/cardContext';
 import List from '../components/List';
 import Search from '../components/Search';
+import BoardMenu from '../components/BoardMenu';
 import TitleInputHandler from '../components/TitleInputHandler';
 import { ReactComponent as AddMemberIcon } from '../assets/images/addMember.svg';
 import { ReactComponent as BoardsIcon } from '../assets/images/boards.svg';
-
+import { ReactComponent as DotsHorizontalIcon } from '../assets/images/dotsHorizontal.svg';
 
 export default function BoardPage() {
     const { boardId } = useParams();
@@ -23,6 +24,7 @@ export default function BoardPage() {
     const inputRef = useRef(null);
 
     const [isAddMember, setIsAddMember] = useState(false);
+    const [isBoardMenu, setIsBoardMenu] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -100,6 +102,12 @@ export default function BoardPage() {
                     <div className="add-members pointer" onClick={() => setIsAddMember(true)}>
                         <AddMemberIcon/>
                         <span>Share</span>
+                    </div>
+                    {isBoardMenu && (
+                        <BoardMenu setIsBoardMenu={setIsBoardMenu} />
+                    )}
+                    <div className="dots-horizontal pointer" onClick={() => setIsBoardMenu(true)}>
+                        <DotsHorizontalIcon/>
                     </div>
                 </div>
                 <List />
